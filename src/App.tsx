@@ -53,7 +53,7 @@ export const theme = {
     h3: "text-[16px] leading-[1.25] font-medium",
     body: "text-[13px] leading-[1.65] font-normal",
     small: "text-[12px] leading-[1.4] font-normal",
-    micro: "text-[11px] leading-[1.0] font-medium tracking-[0.08em] uppercase",
+    micro: "text-[11px] leading-[1.0] font-medium tracking-[0.02em]",
   },
   spacing: [0, 4, 8, 12, 16, 24, 32],
 };
@@ -64,9 +64,10 @@ const CATEGORIES = ["All", "Power", "Robotics", "Sensors", "Audio", "Connectivit
 type Item = {
   id: string;
   title: string;
-  price: string;       // "£9" | "Free"
+  price: string;       // "$9"
   meta: string;        // "2-layer" | "USB-C" | "45×28mm"
   category: string;
+  creator: string;
   image: string;
   layers: string;
   size: string;
@@ -79,78 +80,84 @@ const ITEMS: Item[] = [
   { 
     id: "1", 
     title: "USB-C PD Sink", 
-    price: "£9", 
+    price: "$9", 
     meta: "2-layer", 
     category: "Power",
+    creator: "@kofilabs",
     image: "https://picsum.photos/seed/pcb1/600/400",
     layers: "2",
     size: "45×28mm",
-    estCost: "£2.40",
+    estCost: "$2.40",
     dfmStatus: "Passed",
     description: "A highly optimized USB-C Power Delivery sink module. Supports fixed voltages up to 20V at 5A."
   },
   { 
     id: "2", 
     title: "Li-ion Charger", 
-    price: "£12", 
+    price: "$12", 
     meta: "45×28mm", 
     category: "Power",
+    creator: "@circuitart",
     image: "https://picsum.photos/seed/pcb2/600/400",
     layers: "2",
     size: "45×28mm",
-    estCost: "£3.10",
+    estCost: "$3.10",
     dfmStatus: "Passed",
     description: "Compact Li-ion battery charger with integrated protection and status LEDs."
   },
   { 
     id: "3", 
     title: "DRV8833 Driver", 
-    price: "Free", 
+    price: "$15", 
     meta: "2-layer", 
     category: "Robotics",
+    creator: "@niarobotics",
     image: "https://picsum.photos/seed/pcb3/600/400",
     layers: "2",
     size: "32×32mm",
-    estCost: "£1.80",
+    estCost: "$1.80",
     dfmStatus: "Passed",
     description: "Dual H-bridge motor driver for small robotics projects. Efficient and easy to interface."
   },
   { 
     id: "4", 
     title: "IMU Breakout", 
-    price: "£6", 
+    price: "$6", 
     meta: "I2C", 
     category: "Sensors",
+    creator: "@sensornode",
     image: "https://picsum.photos/seed/pcb4/600/400",
     layers: "2",
     size: "10×10mm",
-    estCost: "£1.20",
+    estCost: "$1.20",
     dfmStatus: "Passed",
     description: "Ultra-compact 6-axis IMU breakout board with I2C interface."
   },
   { 
     id: "5", 
     title: "ESP32-S3 Mini", 
-    price: "£15", 
+    price: "$25", 
     meta: "4-layer", 
     category: "Connectivity",
+    creator: "@espdev",
     image: "https://picsum.photos/seed/pcb5/600/400",
     layers: "4",
     size: "40×20mm",
-    estCost: "£5.50",
+    estCost: "$5.50",
     dfmStatus: "Passed",
     description: "Minimalist ESP32-S3 development board with USB-C and LiPo charging."
   },
   { 
     id: "6", 
     title: "Audio Amp D", 
-    price: "£8", 
+    price: "$18", 
     meta: "Stereo", 
     category: "Audio",
+    creator: "@soundwave",
     image: "https://picsum.photos/seed/pcb6/600/400",
     layers: "2",
     size: "35×25mm",
-    estCost: "£2.10",
+    estCost: "$2.10",
     dfmStatus: "Passed",
     description: "Class D stereo audio amplifier with high efficiency and low distortion."
   },
@@ -159,34 +166,45 @@ const ITEMS: Item[] = [
 // --- Components ---
 
 function BottomNav({ activeTab, onTabChange }: { activeTab: string, onTabChange: (tab: string) => void }) {
-  const tabs = [
-    { id: "explore", label: "Explore", icon: Cpu },
-    { id: "search", label: "Search", icon: Search },
-    { id: "create", label: "Create", icon: Plus },
-    { id: "library", label: "Library", icon: Library },
-    { id: "profile", label: "Profile", icon: User },
-  ];
-
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-black/10 px-4 pb-6 pt-2 flex justify-around items-center z-50">
-      {tabs.map((tab) => (
+    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-black/10 px-6 pb-8 pt-3 flex justify-between items-center z-50">
+      {/* Left Group: Plus and Person */}
+      <div className="flex items-center gap-8">
         <button
-          key={tab.id}
-          onClick={() => onTabChange(tab.id)}
+          onClick={() => onTabChange("create")}
           className={`flex flex-col items-center gap-1 transition-colors ${
-            activeTab === tab.id ? "text-[#0038DF]" : "text-black/40"
+            activeTab === "create" ? "text-[#0038DF]" : "text-black/40"
           }`}
         >
-          <tab.icon size={20} />
-          <span className="text-[10px] font-medium uppercase tracking-[0.08em]">{tab.label}</span>
+          <Plus size={22} strokeWidth={2.5} />
         </button>
-      ))}
+        <button
+          onClick={() => onTabChange("profile")}
+          className={`flex flex-col items-center gap-1 transition-colors ${
+            activeTab === "profile" ? "text-[#0038DF]" : "text-black/40"
+          }`}
+        >
+          <User size={22} strokeWidth={2.5} />
+        </button>
+      </div>
+
+      {/* Right Group: Home */}
+      <div className="flex items-center">
+        <button
+          onClick={() => onTabChange("explore")}
+          className={`flex flex-col items-center gap-1 transition-colors ${
+            activeTab === "explore" ? "text-[#0038DF]" : "text-black/40"
+          }`}
+        >
+          <Cpu size={22} strokeWidth={2.5} />
+        </button>
+      </div>
     </nav>
   );
 }
 
 export default function App() {
-  const [view, setView] = useState<"explore" | "detail" | "tweak">("explore");
+  const [view, setView] = useState<"explore" | "detail" | "tweak" | "list" | "search" | "library" | "profile">("explore");
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [activeTab, setActiveTab] = useState("explore");
@@ -225,6 +243,10 @@ export default function App() {
                 <div className="text-[14px] font-medium tracking-tight">Explorer</div>
                 <button
                   aria-label="Search"
+                  onClick={() => {
+                    setActiveTab("search");
+                    setView("search");
+                  }}
                   className="h-11 w-11 grid place-items-center border border-black/10 rounded-[12px] active:bg-black/5 transition-colors"
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -244,47 +266,56 @@ export default function App() {
               </div>
             </header>
 
-            {/* Intro */}
-            <section className="px-4 pt-5">
-              <div className="text-[14px] font-medium">Explore templates</div>
-              <p className="mt-1 text-[13px] leading-[1.6] text-black/60 max-w-[42ch]">
-                Browse ready-to-tweak PCB templates. Tap one to preview, tweak, and export.
-              </p>
-
-              {/* Category Row */}
-              <div className="mt-4 overflow-x-auto no-scrollbar">
-                <div className="flex gap-2 w-max pb-2">
-                  {CATEGORIES.map((c) => {
-                    const on = c === activeCategory;
-                    return (
-                      <button
-                        key={c}
-                        onClick={() => setActiveCategory(c)}
-                        className={`h-8 px-3 rounded-full border text-[11px] tracking-[0.08em] uppercase transition-all ${
-                          on
-                            ? "border-[#0038DF]/20 bg-[#0038DF]/10 text-[#0038DF]"
-                            : "border-black/10 text-black/60"
-                        }`}
-                      >
-                        {c}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+            {/* Hero Section */}
+            <section className="px-6 pt-12 pb-8 bg-white">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
+                <h1 className="text-[36px] font-medium leading-[1.05] tracking-[-0.03em] text-[#0B0D12]">
+                  Design <br />
+                  <span className="text-[#0038DF]">without limits.</span>
+                </h1>
+                <p className="mt-4 text-[15px] leading-[1.6] text-black/50 max-w-[280px]">
+                  Browse ready-to-tweak templates. <br />
+                  Tap to preview, tweak, and export.
+                </p>
+              </motion.div>
             </section>
 
-            {/* Grid */}
-            <section className="px-4 pb-10 pt-2">
-              <div className="grid grid-cols-2 gap-3">
+            {/* Category Row - Shifted down with flair */}
+            <div className="px-6 mt-12 overflow-x-auto no-scrollbar">
+              <div className="flex gap-3 w-max pb-2">
+                {CATEGORIES.map((c) => {
+                  const on = c === activeCategory;
+                  return (
+                    <button
+                      key={c}
+                      onClick={() => setActiveCategory(c)}
+                      className={`h-10 px-6 rounded-full border text-[13px] font-medium transition-all duration-300 ${
+                        on
+                          ? "border-[#0038DF] bg-[#0038DF] text-white shadow-[0_8px_20px_rgba(0,56,223,0.15)]"
+                          : "bg-[#F7F7F7] border-transparent text-black/40 hover:bg-[#EFEFEF]"
+                      }`}
+                    >
+                      {c}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Grid - Shifted down and vertical tiles */}
+            <section className="px-6 pb-40 pt-8">
+              <div className="grid grid-cols-2 gap-x-5 gap-y-10">
                 {isLoading ? (
-                  // Skeleton Loading
                   Array.from({ length: 4 }).map((_, i) => (
                     <div key={i} className="animate-pulse">
-                      <div className="aspect-square border border-black/5 rounded-[14px] bg-black/[0.02]" />
-                      <div className="mt-2 space-y-2">
-                        <div className="h-3 w-3/4 bg-black/[0.05] rounded" />
-                        <div className="h-2 w-1/2 bg-black/[0.03] rounded" />
+                      <div className="aspect-[3/4] border border-black/5 rounded-[20px] bg-black/[0.02]" />
+                      <div className="mt-4 space-y-2">
+                        <div className="h-5 w-1/4 bg-black/[0.05] rounded" />
+                        <div className="h-4 w-3/4 bg-black/[0.03] rounded" />
                       </div>
                     </div>
                   ))
@@ -294,30 +325,40 @@ export default function App() {
                       layoutId={`item-${item.id}`}
                       key={item.id}
                       className="text-left group"
-                      whileTap={{ scale: 0.97 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => openDetail(item)}
                     >
-                      {/* Square tile */}
-                      <div className="aspect-square border border-black/10 rounded-[14px] bg-white grid place-items-center relative overflow-hidden group-active:border-[#0038DF] transition-colors duration-150">
+                      {/* Vertical Tile - Portrait Aspect */}
+                      <div className="aspect-[3/4] border border-black/[0.06] rounded-[24px] bg-white grid place-items-center relative overflow-hidden group-active:border-[#0038DF] transition-all duration-500 hover:shadow-2xl hover:shadow-black/5">
                         {/* Subtle grid pattern */}
-                        <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 0)', backgroundSize: '12px 12px' }} />
+                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 0)', backgroundSize: '20px 20px' }} />
                         
                         {/* PCB thumbnail placeholder */}
-                        <div className="w-[48%] aspect-[4/3] border border-black/10 rounded-[12px] bg-[#F7F8FB] grid place-items-center overflow-hidden">
+                        <div className="w-[70%] aspect-square border border-black/[0.04] rounded-[16px] bg-[#F9FAFB] grid place-items-center overflow-hidden shadow-inner">
                           <img 
                             src={item.image} 
                             alt={item.title} 
-                            className="w-full h-full object-cover opacity-80 mix-blend-multiply" 
+                            className="w-full h-full object-cover opacity-90 mix-blend-multiply transition-transform duration-700 group-hover:scale-110" 
                             referrerPolicy="no-referrer"
                           />
                         </div>
+
+                        {/* Floating Price Tag */}
+                        <div className="absolute top-4 right-4 px-3 py-1.5 bg-white/95 backdrop-blur-md border border-black/[0.05] rounded-full text-[12px] font-bold text-[#0038DF] shadow-sm">
+                          {item.price}
+                        </div>
                       </div>
 
-                      {/* Two lines only */}
-                      <div className="mt-2">
-                        <div className="text-[13px] font-medium truncate">{item.title}</div>
-                        <div className="mt-[2px] text-[12px] text-black/60 truncate">
-                          {item.price} • {item.meta}
+                      {/* Info lines - Price First Emphasis */}
+                      <div className="mt-5 px-1">
+                        <div className="text-[17px] font-bold text-[#0038DF] leading-none mb-2">
+                          {item.price}
+                        </div>
+                        <div className="text-[15px] font-medium text-[#0B0D12] truncate leading-tight">
+                          {item.title}
+                        </div>
+                        <div className="mt-1.5 text-[12px] text-black/30 truncate font-normal">
+                          by {item.creator} • {item.meta}
                         </div>
                       </div>
                     </motion.button>
@@ -325,6 +366,154 @@ export default function App() {
                 )}
               </div>
             </section>
+          </motion.div>
+        )}
+
+        {view === "search" && (
+          <motion.div
+            key="search"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="p-6 pb-24"
+          >
+            <h1 className="text-[20px] font-medium mb-6">Search</h1>
+            <div className="relative group">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-black/40 group-focus-within:text-[#0038DF] transition-colors" size={16} />
+              <input 
+                type="text" 
+                autoFocus
+                placeholder="Search templates, chips, boards..."
+                className="w-full h-12 pl-10 pr-4 border border-black/10 rounded-[12px] text-[14px] outline-none focus:border-[#0038DF] transition-all"
+              />
+            </div>
+            <div className="mt-8">
+              <h2 className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40 mb-4">Recent Searches</h2>
+              <div className="space-y-3">
+                {["ESP32-S3", "USB-C PD", "Motor Driver"].map(s => (
+                  <div key={s} className="flex items-center gap-3 text-[14px] text-black/60">
+                    <Search size={14} />
+                    {s}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {view === "library" && (
+          <motion.div
+            key="library"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="p-6 pb-24"
+          >
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-[20px] font-medium">Library</h1>
+              <button onClick={() => {
+                setActiveTab("create");
+                setView("list");
+              }} className="h-10 px-4 rounded-full bg-[#0038DF] text-white text-[12px] font-medium flex items-center gap-2">
+                <Plus size={14} /> List New
+              </button>
+            </div>
+            <div className="space-y-4">
+              <div className="p-4 border border-black/10 rounded-[14px] flex items-center gap-4">
+                <div className="h-12 w-12 bg-surface rounded-lg flex items-center justify-center">
+                  <FileText size={20} className="text-black/20" />
+                </div>
+                <div>
+                  <div className="text-[14px] font-medium">My Custom Controller</div>
+                  <div className="text-[12px] text-black/40">Draft • Modified 2h ago</div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {view === "profile" && (
+          <motion.div
+            key="profile"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="p-6 pb-24"
+          >
+            <div className="flex flex-col items-center text-center mt-8">
+              <div className="h-24 w-24 rounded-full bg-surface border border-black/5 mb-4 flex items-center justify-center">
+                <User size={40} className="text-black/20" />
+              </div>
+              <h1 className="text-[20px] font-medium">Kofi Labs</h1>
+              <p className="text-[13px] text-black/40">Hardware Engineer • London, UK</p>
+            </div>
+            <div className="mt-12 space-y-1">
+              {["My Listings", "Sales Analytics", "Payouts", "Settings"].map(item => (
+                <button key={item} className="w-full flex items-center justify-between py-4 border-b border-black/5 px-2 active:bg-black/5 rounded-lg transition-colors">
+                  <span className="text-[14px]">{item}</span>
+                  <ChevronRight size={16} className="text-black/20" />
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {view === "list" && (
+          <motion.div
+            key="list"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-white z-[70] p-6 pb-24 overflow-y-auto"
+          >
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-[20px] font-medium">List Template</h1>
+              <button onClick={() => {
+                setActiveTab("explore");
+                setView("explore");
+              }} className="text-black/40">
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              <div className="aspect-video rounded-[14px] bg-surface border border-dashed border-black/20 flex flex-col items-center justify-center text-black/40">
+                <FileText size={32} className="mb-2" />
+                <span className="text-[12px]">Thumbnail auto-generated</span>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="text-[11px] font-medium uppercase tracking-[0.08em] block mb-2 text-black/40">Title</label>
+                  <input type="text" defaultValue="My Custom Board" className="w-full h-12 px-4 border border-black/10 rounded-[12px] text-[14px] outline-none focus:border-[#0038DF]" />
+                </div>
+                <div>
+                  <label className="text-[11px] font-medium uppercase tracking-[0.08em] block mb-2 text-black/40">Price</label>
+                  <input type="text" defaultValue="$5.00" className="w-full h-12 px-4 border border-black/10 rounded-[12px] text-[14px] outline-none focus:border-[#0038DF]" />
+                </div>
+                <div>
+                  <label className="text-[11px] font-medium uppercase tracking-[0.08em] block mb-2 text-black/40">Tweakable Params</label>
+                  <div className="flex flex-wrap gap-2">
+                    {["Dimensions", "Connectors", "Voltage", "Mounting"].map(p => (
+                      <div key={p} className="px-3 py-1.5 bg-[#0038DF]/10 text-[#0038DF] text-[11px] font-medium rounded-full flex items-center gap-2">
+                        {p} <Plus size={12} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <button 
+                onClick={() => {
+                  alert("Published!");
+                  setActiveTab("explore");
+                  setView("explore");
+                }}
+                className="w-full h-14 bg-[#0038DF] text-white rounded-[12px] font-medium text-[15px] mt-8 shadow-lg shadow-blue-200"
+              >
+                Publish Listing
+              </button>
+            </div>
           </motion.div>
         )}
 
@@ -379,7 +568,7 @@ export default function App() {
                   <div className="px-2 py-0.5 bg-green-50 text-green-600 text-[10px] font-bold rounded-full uppercase tracking-wider border border-green-100">
                     DFM: {selectedItem.dfmStatus}
                   </div>
-                  <div className="text-[12px] text-black/40">by @kofilabs</div>
+                  <div className="text-[12px] text-black/40">by {selectedItem.creator}</div>
                 </div>
               </div>
 
@@ -482,6 +671,7 @@ export default function App() {
                 <button 
                   onClick={() => {
                     alert("Generating Export...");
+                    setActiveTab("explore");
                     setView("explore");
                   }}
                   className="h-12 flex-1 rounded-[12px] bg-[#0038DF] text-white text-[14px] font-medium active:bg-[#002bb3] transition-colors"
@@ -499,6 +689,10 @@ export default function App() {
         onTabChange={(tab) => {
           setActiveTab(tab);
           if (tab === "explore") setView("explore");
+          else if (tab === "search") setView("search");
+          else if (tab === "create") setView("list");
+          else if (tab === "library") setView("library");
+          else if (tab === "profile") setView("profile");
         }} 
       />
     </div>
