@@ -80,7 +80,7 @@ const ITEMS: Item[] = [
   { 
     id: "1", 
     title: "USB-C PD Sink", 
-    price: "$9", 
+    price: "$9.00", 
     meta: "2-layer", 
     category: "Power",
     creator: "@kofilabs",
@@ -94,7 +94,7 @@ const ITEMS: Item[] = [
   { 
     id: "2", 
     title: "Li-ion Charger", 
-    price: "$12", 
+    price: "$12.00", 
     meta: "45×28mm", 
     category: "Power",
     creator: "@circuitart",
@@ -108,7 +108,7 @@ const ITEMS: Item[] = [
   { 
     id: "3", 
     title: "DRV8833 Driver", 
-    price: "$15", 
+    price: "$15.00", 
     meta: "2-layer", 
     category: "Robotics",
     creator: "@niarobotics",
@@ -122,7 +122,7 @@ const ITEMS: Item[] = [
   { 
     id: "4", 
     title: "IMU Breakout", 
-    price: "$6", 
+    price: "$6.00", 
     meta: "I2C", 
     category: "Sensors",
     creator: "@sensornode",
@@ -136,7 +136,7 @@ const ITEMS: Item[] = [
   { 
     id: "5", 
     title: "ESP32-S3 Mini", 
-    price: "$25", 
+    price: "$25.00", 
     meta: "4-layer", 
     category: "Connectivity",
     creator: "@espdev",
@@ -150,7 +150,7 @@ const ITEMS: Item[] = [
   { 
     id: "6", 
     title: "Audio Amp D", 
-    price: "$18", 
+    price: "$18.00", 
     meta: "Stereo", 
     category: "Audio",
     creator: "@soundwave",
@@ -286,16 +286,16 @@ export default function App() {
 
             {/* Category Row - Shifted down with flair */}
             <div className="px-6 mt-12 overflow-x-auto no-scrollbar">
-              <div className="flex gap-3 w-max pb-2">
+              <div className="flex gap-2 w-max pb-2">
                 {CATEGORIES.map((c) => {
                   const on = c === activeCategory;
                   return (
                     <button
                       key={c}
                       onClick={() => setActiveCategory(c)}
-                      className={`h-10 px-6 rounded-full border text-[13px] font-medium transition-all duration-300 ${
+                      className={`h-7 px-4 rounded-full border text-[11px] font-medium transition-all duration-300 ${
                         on
-                          ? "border-[#0038DF] bg-[#0038DF] text-white shadow-[0_8px_20px_rgba(0,56,223,0.15)]"
+                          ? "border-[#0038DF] bg-[#0038DF] text-white shadow-[0_4px_12px_rgba(0,56,223,0.1)]"
                           : "bg-[#F7F7F7] border-transparent text-black/40 hover:bg-[#EFEFEF]"
                       }`}
                     >
@@ -312,7 +312,7 @@ export default function App() {
                 {isLoading ? (
                   Array.from({ length: 4 }).map((_, i) => (
                     <div key={i} className="animate-pulse">
-                      <div className="aspect-[3/4] border border-black/5 rounded-[20px] bg-black/[0.02]" />
+                      <div className="aspect-[3/4] border border-black/5 rounded-[6px] bg-black/[0.02]" />
                       <div className="mt-4 space-y-2">
                         <div className="h-5 w-1/4 bg-black/[0.05] rounded" />
                         <div className="h-4 w-3/4 bg-black/[0.03] rounded" />
@@ -329,12 +329,12 @@ export default function App() {
                       onClick={() => openDetail(item)}
                     >
                       {/* Vertical Tile - Portrait Aspect */}
-                      <div className="aspect-[3/4] border border-black/[0.06] rounded-[24px] bg-white grid place-items-center relative overflow-hidden group-active:border-[#0038DF] transition-all duration-500 hover:shadow-2xl hover:shadow-black/5">
+                      <div className="aspect-[3/4] border border-black/[0.06] rounded-[6px] bg-white grid place-items-center relative overflow-hidden group-active:border-[#0038DF] transition-all duration-500 hover:shadow-2xl hover:shadow-black/5">
                         {/* Subtle grid pattern */}
                         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 0)', backgroundSize: '20px 20px' }} />
                         
                         {/* PCB thumbnail placeholder */}
-                        <div className="w-[70%] aspect-square border border-black/[0.04] rounded-[16px] bg-[#F9FAFB] grid place-items-center overflow-hidden shadow-inner">
+                        <div className="w-[70%] aspect-square border border-black/[0.04] rounded-[4px] bg-[#F9FAFB] grid place-items-center overflow-hidden shadow-inner">
                           <img 
                             src={item.image} 
                             alt={item.title} 
@@ -342,23 +342,18 @@ export default function App() {
                             referrerPolicy="no-referrer"
                           />
                         </div>
-
-                        {/* Floating Price Tag */}
-                        <div className="absolute top-4 right-4 px-3 py-1.5 bg-white/95 backdrop-blur-md border border-black/[0.05] rounded-full text-[12px] font-bold text-[#0038DF] shadow-sm">
-                          {item.price}
-                        </div>
                       </div>
 
-                      {/* Info lines - Price First Emphasis */}
-                      <div className="mt-5 px-1">
-                        <div className="text-[17px] font-bold text-[#0038DF] leading-none mb-2">
+                      {/* Info lines - Minimal Typography */}
+                      <div className="mt-4 px-0.5">
+                        <div className="text-[14px] font-bold text-[#0B0D12] leading-none mb-1.5">
                           {item.price}
                         </div>
-                        <div className="text-[15px] font-medium text-[#0B0D12] truncate leading-tight">
+                        <div className="text-[13px] font-medium text-[#0B0D12] truncate leading-tight mb-1">
                           {item.title}
                         </div>
-                        <div className="mt-1.5 text-[12px] text-black/30 truncate font-normal">
-                          by {item.creator} • {item.meta}
+                        <div className="text-[11px] text-black/30 truncate font-normal">
+                          by {item.creator.replace('@', '')}
                         </div>
                       </div>
                     </motion.button>
