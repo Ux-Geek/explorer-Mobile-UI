@@ -172,6 +172,7 @@ function BottomNav({ activeTab, onTabChange }: { activeTab: string, onTabChange:
       <div className="flex items-center gap-8">
         <button
           onClick={() => onTabChange("create")}
+          whileTap={{ scale: 0.9 }}
           className={`flex flex-col items-center gap-1 transition-colors ${
             activeTab === "create" ? "text-[#0038DF]" : "text-black/40"
           }`}
@@ -180,6 +181,7 @@ function BottomNav({ activeTab, onTabChange }: { activeTab: string, onTabChange:
         </button>
         <button
           onClick={() => onTabChange("profile")}
+          whileTap={{ scale: 0.9 }}
           className={`flex flex-col items-center gap-1 transition-colors ${
             activeTab === "profile" ? "text-[#0038DF]" : "text-black/40"
           }`}
@@ -192,6 +194,7 @@ function BottomNav({ activeTab, onTabChange }: { activeTab: string, onTabChange:
       <div className="flex items-center">
         <button
           onClick={() => onTabChange("explore")}
+          whileTap={{ scale: 0.9 }}
           className={`flex flex-col items-center gap-1 transition-colors ${
             activeTab === "explore" ? "text-[#0038DF]" : "text-black/40"
           }`}
@@ -293,9 +296,11 @@ export default function App() {
                     <button
                       key={c}
                       onClick={() => setActiveCategory(c)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       className={`h-7 px-4 rounded-full border text-[11px] font-medium transition-all duration-300 ${
                         on
-                          ? "border-[#0038DF] bg-[#0038DF] text-white shadow-[0_4px_12px_rgba(0,56,223,0.1)]"
+                          ? "border-[#0038DF] bg-[#0038DF] text-white"
                           : "bg-[#F7F7F7] border-transparent text-black/40 hover:bg-[#EFEFEF]"
                       }`}
                     >
@@ -320,10 +325,13 @@ export default function App() {
                     </div>
                   ))
                 ) : (
-                  filtered.map((item) => (
+                  filtered.map((item, idx) => (
                     <motion.button
                       layoutId={`item-${item.id}`}
                       key={item.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.05 }}
                       className="text-left group"
                       whileTap={{ scale: 0.98 }}
                       onClick={() => openDetail(item)}
@@ -568,26 +576,42 @@ export default function App() {
               </div>
 
               {/* Stats Row */}
-              <div className="mt-6 grid grid-cols-3 gap-2">
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="mt-6 grid grid-cols-3 gap-2"
+              >
                 {[
                   { label: "Layers", val: selectedItem.layers, icon: Layers },
                   { label: "Size", val: selectedItem.size, icon: Maximize2 },
                   { label: "Est. Cost", val: selectedItem.estCost, icon: Zap },
-                ].map((s) => (
-                  <div key={s.label} className="bg-[#F7F8FB] border border-black/5 rounded-[14px] p-3 flex flex-col items-center text-center">
+                ].map((s, idx) => (
+                  <motion.div 
+                    key={s.label}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3 + idx * 0.1 }}
+                    className="bg-[#F7F8FB] border border-black/5 rounded-[14px] p-3 flex flex-col items-center text-center"
+                  >
                     <s.icon size={16} className="text-black/40 mb-2" />
                     <div className="text-[11px] font-bold text-black/80">{s.val}</div>
                     <div className="text-[9px] text-black/40 uppercase tracking-wider mt-0.5">{s.label}</div>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
 
-              <div className="mt-8 space-y-4">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                className="mt-8 space-y-4"
+              >
                 <div className="text-[14px] font-medium">Description</div>
                 <p className="text-[13px] leading-[1.65] text-black/60">
                   {selectedItem.description}
                 </p>
-              </div>
+              </motion.div>
             </div>
 
             {/* Sticky Bottom CTA */}
@@ -649,14 +673,21 @@ export default function App() {
                     { label: "Output Voltage", val: "Fixed 12V" },
                     { label: "Mounting", val: "M3 Holes" },
                     { label: "Finish", val: "ENIG" },
-                  ].map((row) => (
-                    <button key={row.label} className="w-full flex items-center justify-between py-4 border-b border-black/5 active:bg-black/5 px-2 rounded-lg transition-colors">
+                  ].map((row, idx) => (
+                    <motion.button 
+                      key={row.label}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + idx * 0.05 }}
+                      whileHover={{ x: 4, backgroundColor: "rgba(0,0,0,0.02)" }}
+                      className="w-full flex items-center justify-between py-4 border-b border-black/5 active:bg-black/5 px-2 rounded-lg transition-colors"
+                    >
                       <span className="text-[13px] text-black/60">{row.label}</span>
                       <div className="flex items-center gap-2">
                         <span className="text-[13px] font-medium">{row.val}</span>
                         <ChevronRight size={16} className="text-black/20" />
                       </div>
-                    </button>
+                    </motion.button>
                   ))}
                 </div>
               </div>
